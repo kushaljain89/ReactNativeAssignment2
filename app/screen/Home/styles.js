@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
     dateSelect: {
         backgroundColor: 'white',
         flex: 1,
-        padding: 10
+        padding: 10,
+        paddingTop:5  
     },
     modalView: {
         height: window.height * 0.8,
