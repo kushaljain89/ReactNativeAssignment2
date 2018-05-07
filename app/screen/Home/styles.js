@@ -20,8 +20,8 @@ const styles = StyleSheet.create({
         paddingTop:5  
     },
     modalView: {
-        height: window.height * 0.8,
-        width: window.width * 0.6,
+        height: 450,
+        width: 300,
         alignSelf: 'center'
     }
 
