@@ -53,20 +53,16 @@ class homeScreen extends React.Component {
     }
 
     changeDateState(status) {
-        console.log('changeDateState', status)
         this.setState({
             selectorStart: status
         })
     }
 
     dayPressed(day) {
-        console.log('pressed called');
-        const dateObj = moment(day['timestamp']).endOf('day');
+        const dateObj = moment(day['timestamp']).startOf('day');
         let newState = {};
-        console.log(dateObj, (this.state.startDateTemp.diff(dateObj, 'days')), (this.state.endDateTemp.diff(dateObj, 'days')));
         if (this.state.startDateTemp && this.state.endDateTemp) {
             if ((this.state.startDateTemp.diff(dateObj, 'days') < 0) && (this.state.endDateTemp.diff(dateObj, 'days') > 0)) {
-                console.log('between');
                 if (this.state.selectorStart) {
                     newState = {
                         startDateTemp: dateObj,
@@ -81,7 +77,6 @@ class homeScreen extends React.Component {
                     }
                 }
             } else if (this.state.startDateTemp.diff(dateObj, 'days') > 0) {
-                console.log('less');
                 if (this.state.selectorStart) {
                     newState = {
                         startDateTemp: dateObj,
@@ -96,8 +91,6 @@ class homeScreen extends React.Component {
                     }
                 }
             } else if (this.state.endDateTemp.diff(dateObj, 'days') < 0) {
-                console.log('greater');
-                console.log(this.state.selectorStart);
                 if (this.state.selectorStart) {
                     newState = {
                         startDateTemp: dateObj,
@@ -115,20 +108,25 @@ class homeScreen extends React.Component {
         } else if (this.state.startDateTemp || this.state.endDateTemp) {
             console.log('never coming case')
         } else {
-            console.log('no date selected');
             newState = {
                 startDateTemp: dateObj,
                 endDateTemp: dateObj.add(1, 'days'),
                 selectorStart: false
             }
         }
-        const markedDates = this.getMarkedDates(moment(newState.startDateTemp), moment(newState.endDateTemp));
-        newState.markedDates = markedDates;
+
+        if (moment(newState.endDateTemp).diff(moment(newState.startDateTemp), 'days') <= 0) {
+            newState = {
+                startDateTemp: moment(newState.startDateTemp),
+                endDateTemp: moment(newState.startDateTemp).add(1, 'days'),
+                selectorStart: false
+            }
+        }
+        newState.markedDates = this.getMarkedDates(moment(newState.startDateTemp), moment(newState.endDateTemp));
         this.setState(newState);
     }
 
     getMarkedDates(start, end) {
-        console.log(start, end);
         const result = {
             [start.format(formatString)]: {
                 color: colorsData.orange,
@@ -138,7 +136,7 @@ class homeScreen extends React.Component {
             }
         };
         let temp = start.add(1, 'days');
-        while(temp.format(formatString) !== end.format(formatString)) {
+        while (temp.format(formatString) !== end.format(formatString)) {
             result[temp.format(formatString)] = {
                 color: colorsData.white,
                 textColor: colorsData.orange
@@ -151,7 +149,6 @@ class homeScreen extends React.Component {
             startingDay: true,
             endingDay: true
         };
-        console.log(result)
         return result;
     }
 
@@ -165,6 +162,12 @@ class homeScreen extends React.Component {
     }
 
     render() {
+        const currentDate = moment().format();
+        const format = 'hh:mm:ss';
+        const currentTime = moment();
+        const beforeTime = moment('00:00:00', format);
+        const afterTime = moment('04:00:00', format);
+
         return (
             <Container>
                 <Header>
@@ -181,7 +184,7 @@ class homeScreen extends React.Component {
                                 editable={false}
                                 maxLength={40}
                                 onClick={this.toggleCalender.bind(this)}
-                                value={(this.state.startDate && this.state.untilDate) ? `${moment(this.state.startDate).format('DD-MMM-YY')} - ${moment(this.state.untilDate).format('DD-MMM-YY')}` : ''}
+                                value={(this.state.startDate && this.state.endDate) ? `${moment(this.state.startDate).format('DD-MMM-YY')} - ${moment(this.state.endDate).format('DD-MMM-YY')}` : ''}
                                 placeholder={'Select Date'}
                                 style={Styles.dateSelect}
                                 underlineColorAndroid='transparent'
@@ -192,7 +195,7 @@ class homeScreen extends React.Component {
                                hardwareAccelerated={true}
                                visible={this.state.modalVisible}
                                onRequestClose={this.toggleCalender.bind(this)}>
-                            <View style={Styles.modalBackDrop}></View>
+                            <View style={Styles.modalBackDrop}/>
                             <View style={Styles.modalParent}>
                                 <View style={Styles.modalView}>
                                     <View style={Styles.calenderHeader}>
@@ -252,7 +255,7 @@ class homeScreen extends React.Component {
                                     </View>
                                     <Calendar
                                         current={new Date(moment())}
-                                        minDate={new Date(moment())}
+                                        minDate={currentTime.isBetween(beforeTime, afterTime) ? new Date(moment().subtract(1, 'days')) : new Date(currentDate)}
                                         maxDate={new Date(moment().add(1, 'year'))}
                                         onDayPress={this.dayPressed.bind(this)}
                                         monthFormat={'MMM yyyy'}
@@ -270,7 +273,8 @@ class homeScreen extends React.Component {
                                     />
                                     <View style={Styles.calenderFooter}>
                                         <View style={Styles.footerBlock}>
-                                            <Text style={Styles.buttonCancel} onPress={this.toggleCalender.bind(this)}>Cancel</Text>
+                                            <Text style={Styles.buttonCancel}
+                                                  onPress={this.toggleCalender.bind(this)}>Cancel</Text>
                                         </View>
                                         <View style={Styles.footerBlock}>
                                             <Text style={Styles.buttonDone}
@@ -287,4 +291,4 @@ class homeScreen extends React.Component {
     }
 }
 
-export default homeScreen
+export default homeScreen;

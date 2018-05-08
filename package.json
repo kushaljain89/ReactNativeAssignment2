@@ -20,7 +20,6 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^6.2.2",
-    "aws-sdk": "^2.178.0",
     "axios": "^0.17.1",
     "classnames": "^2.2.5",
     "expo": "^23.0.4",
@@ -29,7 +28,6 @@
     "react": "16.0.0",
     "react-native": "0.50.3",
     "react-native-calendars": "^1.19.3",
-    "react-native-range-datepicker": "git+https://github.com/kushaljain89/react-native-range-datepicker",
     "react-navigation": "^1.0.0-beta.22",
     "react-navigation-redux-helpers": "^1.0.5",
     "react-redux": "^5.0.6",
