@@ -29,10 +29,6 @@ class homeScreen extends React.Component {
     }
 
     closeModal() {
-        this.setState({
-            startDate: '',
-            untilDate: ''
-        })
         this.toggleCalender();
     }
 
