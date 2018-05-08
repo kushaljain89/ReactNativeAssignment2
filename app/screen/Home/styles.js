@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         left: 0
     },
     modalView: {
-        height: window.height * 0.7,
+        height: window.height * 0.65,
         width: window.width * 0.8,
         alignSelf: 'center',
         backgroundColor: '#ffffff',
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
         opacity: 1
     },
     calenderHeader: {
-        height: window.height * 0.7 * 0.15,
+        height: window.height * 0.65 * 0.18,
         width: window.width * 0.8,
         backgroundColor: 'rgb(29,37,72)',
         flexDirection: 'row'
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
         fontSize: 18
     },
     calenderFooter: {
-        height: window.height * 0.7 * 0.15,
+        height: window.height * 0.65 * 0.18,
         width: window.width * 0.8,
         backgroundColor: '#ffffff',
         flexDirection: 'row',
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     footerBlock: {
         flex: 0.25,
         alignItems: 'center',
-        paddingBottom: 10
+        paddingTop: 8
     },
     buttonCancel: {
         color: '#7C7C7C',

@@ -147,6 +147,48 @@ class homeScreen extends React.Component {
         });
     }
 
+    renderCustomDay({date, state, marking}) {
+        const currentTime = moment();
+        const format = 'hh:mm:ss';
+        const beforeTime = moment('00:00:00', format);
+        const afterTime = moment('04:00:00', format);
+        const styleObj = {
+            textAlign: 'center',
+            color: state === 'disabled' ? 'gray' : 'black',
+            height: 25,
+            width: 25,
+            paddingTop: 4
+        };
+        const styleObjView = {flex: 1, justifyContent: 'center', alignItems: 'center'};
+        if (marking && marking.endingDay && marking.endingDay) {
+            styleObj['backgroundColor'] = marking.color;
+            styleObj['borderRadius'] = 15;
+            styleObj['color'] = marking.textColor;
+        } else if (marking && marking.textColor) {
+            styleObj['color'] = marking.textColor;
+        }
+        if (currentTime.isBetween(beforeTime, afterTime) && (state !== 'disabled') && moment().endOf('day').diff(moment(date['timestamp']).endOf('day'), 'days') > 0) {
+            return (<View style={styleObjView}><Text style={styleObj}
+                                                     onPress={this.dayPressed.bind(this, date)}>{date.day}</Text>
+                <FontAwesome name="moon-o" style={{
+                    fontSize: 8,
+                    padding: 0,
+                    margin: 0,
+                    position: 'absolute',
+                    bottom: -1,
+                    right: 15,
+                    color: (marking || {}).textColor || 'black'
+                }}></FontAwesome></View>);
+        } else {
+            if (state === 'disabled') {
+                return (<View style={styleObjView}><Text style={styleObj}>{date.day}</Text></View>);
+            } else {
+                return (<View style={styleObjView}><Text style={styleObj}
+                                                         onPress={this.dayPressed.bind(this, date)}>{date.day}</Text></View>);
+            }
+        }
+    }
+
     render() {
         const currentDate = moment().format();
         const format = 'hh:mm:ss';
@@ -202,12 +244,13 @@ class homeScreen extends React.Component {
                                                         this.state.startDateTemp.format('ddd, D MMM')
                                                     }</Text>
                                                 </View>
-                                                {
-                                                    this.state.selectorStart ?
-                                                        <View style={{flex: 1, paddingBottom: 0, marginBottom: 0}}>
-                                                            <FontAwesome name="caret-up" style={Styles.caretIcon}/>
-                                                        </View> : <View/>
-                                                }
+                                                <View style={{flex: 1, paddingBottom: 0, marginBottom: 0}}>
+                                                    {
+                                                        this.state.selectorStart ?
+                                                            <FontAwesome name="caret-up" style={Styles.caretIcon}/> :
+                                                            <View/>
+                                                    }
+                                                </View>
                                             </View>
                                         </TouchableOpacity>
                                         <View style={Styles.headerBlock}>
@@ -230,12 +273,13 @@ class homeScreen extends React.Component {
                                                         this.state.endDateTemp.format('ddd, D MMM')
                                                     }</Text>
                                                 </View>
-                                                {
-                                                    !this.state.selectorStart ?
-                                                        <View style={{flex: 1, paddingBottom: 0, marginBottom: 0}}>
-                                                            <FontAwesome name="caret-up" style={Styles.caretIcon}/>
-                                                        </View> : <View/>
-                                                }
+                                                <View style={{flex: 1, paddingBottom: 0, marginBottom: 0}}>
+                                                    {
+                                                        !this.state.selectorStart ?
+                                                            <FontAwesome name="caret-up" style={Styles.caretIcon}/> :
+                                                            <View/>
+                                                    }
+                                                </View>
                                             </View>
                                         </TouchableOpacity>
                                     </View>
@@ -256,6 +300,7 @@ class homeScreen extends React.Component {
                                             selectedDayBackgroundColor: '#FF7F50',
                                             selectedDayTextColor: '#ffffff',
                                         }}
+                                        dayComponent={this.renderCustomDay.bind(this)}
                                     />
                                     <View style={Styles.calenderFooter}>
                                         <View style={Styles.footerBlock}>
