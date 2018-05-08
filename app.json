@@ -1,14 +1,14 @@
 {
   "expo": {
     "sdkVersion": "23.0.0",
-    "name": "Your App Name",
+    "name": "React Native Calender",
     "version": "1.0.0",
-    "slug": "your-app-slug",
+    "slug": "react-native-calender",
     "ios": {
-      "bundleIdentifier": "com.yourcompany.yourappname"
+      "bundleIdentifier": "com.fabhotels.calender"
     },
     "android": {
-      "package": "com.yourcompany.yourappname"
+      "package": "com.fabhotels.calender"
     }
   }
 }
