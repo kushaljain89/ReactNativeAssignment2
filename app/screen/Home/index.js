@@ -59,9 +59,9 @@ class homeScreen extends React.Component {
     }
 
     dayPressed(day) {
-        const dateObj = moment(day['timestamp']).startOf('day');
+        const dateObj = moment(day['timestamp']).endOf('day');
         let newState = {};
-        if (this.state.startDateTemp && this.state.endDateTemp) {
+        if (this.state.startDateTemp && this.state.endDateTemp && (this.state.startDateTemp.diff(dateObj, 'days') !== 0) && (this.state.endDateTemp.diff(dateObj, 'days') !== 0)) {
             if ((this.state.startDateTemp.diff(dateObj, 'days') < 0) && (this.state.endDateTemp.diff(dateObj, 'days') > 0)) {
                 if (this.state.selectorStart) {
                     newState = {
@@ -86,7 +86,7 @@ class homeScreen extends React.Component {
                 } else {
                     newState = {
                         startDateTemp: dateObj,
-                        endDateTemp: dateObj.add(1, 'days'),
+                        endDateTemp: moment(dateObj).add(1, 'days'),
                         selectorStart: false
                     }
                 }
@@ -94,7 +94,7 @@ class homeScreen extends React.Component {
                 if (this.state.selectorStart) {
                     newState = {
                         startDateTemp: dateObj,
-                        endDateTemp: dateObj.add(1, 'days'),
+                        endDateTemp: moment(dateObj).add(1, 'days'),
                         selectorStart: false
                     }
                 } else {
@@ -105,51 +105,37 @@ class homeScreen extends React.Component {
                     }
                 }
             }
-        } else if (this.state.startDateTemp || this.state.endDateTemp) {
-            console.log('never coming case')
-        } else {
-            newState = {
-                startDateTemp: dateObj,
-                endDateTemp: dateObj.add(1, 'days'),
-                selectorStart: false
-            }
+            newState.markedDates = this.getMarkedDates(moment(newState.startDateTemp), moment(newState.endDateTemp));
+            this.setState(newState);
         }
-
-        if (moment(newState.endDateTemp).diff(moment(newState.startDateTemp), 'days') <= 0) {
-            newState = {
-                startDateTemp: moment(newState.startDateTemp),
-                endDateTemp: moment(newState.startDateTemp).add(1, 'days'),
-                selectorStart: false
-            }
-        }
-        newState.markedDates = this.getMarkedDates(moment(newState.startDateTemp), moment(newState.endDateTemp));
-        this.setState(newState);
     }
 
     getMarkedDates(start, end) {
-        const result = {
-            [start.format(formatString)]: {
+        if (end.diff(start, 'days') > 0) {
+            const result = {
+                [start.format(formatString)]: {
+                    color: colorsData.orange,
+                    textColor: colorsData.white,
+                    startingDay: true,
+                    endingDay: true
+                }
+            };
+            let temp = start.add(1, 'days');
+            while (temp.format(formatString) !== end.format(formatString)) {
+                result[temp.format(formatString)] = {
+                    color: colorsData.white,
+                    textColor: colorsData.orange
+                };
+                temp = temp.add(1, 'days');
+            }
+            result[end.format(formatString)] = {
                 color: colorsData.orange,
                 textColor: colorsData.white,
                 startingDay: true,
                 endingDay: true
-            }
-        };
-        let temp = start.add(1, 'days');
-        while (temp.format(formatString) !== end.format(formatString)) {
-            result[temp.format(formatString)] = {
-                color: colorsData.white,
-                textColor: colorsData.orange
             };
-            temp = temp.add(1, 'days');
+            return result;
         }
-        result[end.format(formatString)] = {
-            color: colorsData.orange,
-            textColor: colorsData.white,
-            startingDay: true,
-            endingDay: true
-        };
-        return result;
     }
 
     confirmDateSelection() {
