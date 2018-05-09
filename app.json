@@ -9,6 +9,7 @@
     },
     "android": {
       "package": "com.fabhotels.calender"
-    }
+    },
+    "orientation": "portrait"
   }
 }

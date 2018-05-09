@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         left: 0
     },
     modalView: {
-        height: window.height * 0.65,
+        height: (window.height * 0.65 * 0.3) + 265,
         width: window.width * 0.8,
         alignSelf: 'center',
         backgroundColor: '#ffffff',
@@ -48,7 +48,11 @@ const styles = StyleSheet.create({
         height: window.height * 0.65 * 0.18,
         width: window.width * 0.8,
         backgroundColor: 'rgb(29,37,72)',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginBottom: -5
+    },
+    calenderComponent: {
+        height: 265
     },
     headerBlock: {
         flex: 1,
@@ -64,8 +68,7 @@ const styles = StyleSheet.create({
     caretIcon: {
         color: '#ffffff',
         alignSelf: 'center',
-        fontSize: 24,
-        marginBottom: 0,
+        fontSize: 35,
         marginTop: 5
     },
     textCheck: {
@@ -77,16 +80,16 @@ const styles = StyleSheet.create({
         fontSize: 18
     },
     calenderFooter: {
-        height: window.height * 0.65 * 0.18,
+        height: window.height * 0.65 * 0.12,
         width: window.width * 0.8,
         backgroundColor: '#ffffff',
         flexDirection: 'row',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
+        paddingTop: window.height * 0.65 * 0.12 * 0.35
     },
     footerBlock: {
         flex: 0.25,
-        alignItems: 'center',
-        paddingTop: 8
+        alignItems: 'center'
     },
     buttonCancel: {
         color: '#7C7C7C',

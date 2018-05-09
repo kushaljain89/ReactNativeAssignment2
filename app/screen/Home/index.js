@@ -27,7 +27,7 @@ class homeScreen extends React.Component {
             endDate: null,
             startDateTemp: moment().endOf('day'),
             endDateTemp: moment().add(1, 'days').endOf('day'),
-            selectorStart: false,
+            selectorStart: true,
             markedDates: {
                 [moment().format(formatString)]: {
                     color: colorsData.orange,
@@ -50,6 +50,16 @@ class homeScreen extends React.Component {
         this.setState({
             modalVisible: !this.state.modalVisible
         })
+    }
+
+    closeCalender() {
+        const newState = {
+            startDateTemp: this.state.initialStatus ? moment().endOf('day') : this.state.startDate,
+            endDateTemp: this.state.initialStatus ? moment().add(1, 'days').endOf('day') : this.state.endDate,
+            modalVisible: false
+        };
+        newState.markedDates = this.getMarkedDates(moment(newState.startDateTemp), moment(newState.endDateTemp));
+        this.setState(newState);
     }
 
     changeDateState(status) {
@@ -284,7 +294,7 @@ class homeScreen extends React.Component {
                                         </TouchableOpacity>
                                     </View>
                                     <Calendar
-                                        current={new Date(moment())}
+                                        current={this.state.selectorStart ? (new Date(this.state.startDateTemp)) : (new Date(this.state.endDateTemp))}
                                         minDate={currentTime.isBetween(beforeTime, afterTime) ? new Date(moment().subtract(1, 'days')) : new Date(currentDate)}
                                         maxDate={new Date(moment().add(1, 'year'))}
                                         onDayPress={this.dayPressed.bind(this)}
@@ -300,12 +310,13 @@ class homeScreen extends React.Component {
                                             selectedDayBackgroundColor: '#FF7F50',
                                             selectedDayTextColor: '#ffffff',
                                         }}
+                                        style={Styles.calenderComponent}
                                         dayComponent={this.renderCustomDay.bind(this)}
                                     />
                                     <View style={Styles.calenderFooter}>
                                         <View style={Styles.footerBlock}>
                                             <Text style={Styles.buttonCancel}
-                                                  onPress={this.toggleCalender.bind(this)}>Cancel</Text>
+                                                  onPress={this.closeCalender.bind(this)}>Cancel</Text>
                                         </View>
                                         <View style={Styles.footerBlock}>
                                             <Text style={Styles.buttonDone}
