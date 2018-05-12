@@ -7,6 +7,7 @@ import AppRoot from '@app/index.js';
 export default class App extends React.Component {
 	constructor (props) {
 		super(props);
+		console.log('App Init');
 		UIManager.setLayoutAnimationEnabledExperimental
 						&& UIManager.setLayoutAnimationEnabledExperimental(true);
 	}
